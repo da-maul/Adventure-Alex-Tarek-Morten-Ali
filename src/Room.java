@@ -7,16 +7,13 @@ public class Room {
     private Room west;
     private boolean isLit = false;
 
+    //Constructor is basic because most of a room is created in the "roomsInit" method in the Adventure class
     public Room(String name){
         this.name = name;
     }
 
-
-
-
-
+    //setters
     public void setDescription(String description) {this.description = description;}
-
     public void setNorth(Room north) {this.north = north;}
     public void setEast(Room east) {this.east = east;}
     public void setSouth(Room south) {this.south = south;}
@@ -28,6 +25,7 @@ public class Room {
     public String getDescription() {return description;}
     public boolean isLit() {return isLit;}
 
+    //directional getters return this room if no room exists in that direction
     public Room getNorth() {
         if (north != null){return north;}
         else {return this;}
