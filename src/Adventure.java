@@ -1,16 +1,18 @@
 public class Adventure {
 
-    public void roomsInit(){
-        Room room1 = new Room("Room 1");
-        Room room2 = new Room("Room 2");
-        Room room3 = new Room("Room 3");
-        Room room4 = new Room("Room 4");
-        Room room5 = new Room("Room 5");
-        Room room6 = new Room("Room 6");
-        Room room7 = new Room("Room 7");
-        Room room8 = new Room("Room 8");
-        Room room9 = new Room("Room 9");
+    Room room1 = new Room("Entryway (Room 1)");
+    Room room2 = new Room("Dry Corridor (Room 2)");
+    Room room3 = new Room("Warehouse (Room 3)");
+    Room room4 = new Room("Armory (Room 4)");
+    Room room5 = new Room("Treasury (Room 5)");
+    Room room6 = new Room("Kitchen (Room 6)");
+    Room room7 = new Room("Barracks (Room 7)");
+    Room room8 = new Room("Wet Corridor (Room 8)");
+    Room room9 = new Room("Mess Hall (Room 9)");
 
+    Room currentRoom = room1;
+
+    public void roomsInit(){
         //room1
         room1.setEast(room2); room1.setSouth(room4);
         room1.setDescription("""
@@ -69,9 +71,37 @@ public class Adventure {
     }
 
     public void userInterface(){
+        roomsInit();
         IO.println("""
+                    
                 You awaken with a start, a bump on the back of your head, your whole body feels bruised.
-                You open your eyes and are dazzled by the sun, sitting up,
+                You open your eyes and are dazzled by the sun, sitting up, you realize you're surrounded by walls
+                on all sides. You're in a damp, cool room with walls of grey cobblestone, dark moss growing in
+                the cracks. A dungeon... You rise to your feet and dust yourself off, determined to make your way
+                out of here...
                 """);
+        boolean playing = true;
+        while (playing){
+            IO.println("You are in the "+currentRoom.getName());
+            IO.println(currentRoom.getDescription());
+
+            boolean playerInputIsInvalid = true;
+            while (playerInputIsInvalid) {
+                String input = IO.readln("Which way do you go?").toUpperCase();
+                //IO.println("player's input is:"+ input); //Debug Line
+                Room roomMovedTo = new Room("");
+                switch (input) {
+                    case "NORTH" -> roomMovedTo = currentRoom.getNorth();
+                    case "EAST" -> roomMovedTo = currentRoom.getEast();
+                    case "SOUTH" -> roomMovedTo = currentRoom.getSouth();
+                    case "WEST" -> roomMovedTo = currentRoom.getWest();
+                    default -> roomMovedTo = currentRoom;
+                }
+                if (roomMovedTo == currentRoom) {
+                    IO.println("You get confused and bump into a wall...");
+                }
+                else {currentRoom = roomMovedTo; playerInputIsInvalid = false;}
+            }
+        }
     }
 }
