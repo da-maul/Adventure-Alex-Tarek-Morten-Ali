@@ -1,4 +1,8 @@
+import java.lang.reflect.Array;
+
 public class Adventure {
+    private Room currentRoom;
+
 
     Room room1 = new Room("Entryway (Room 1)");
     Room room2 = new Room("Dry Corridor (Room 2)");
@@ -10,7 +14,7 @@ public class Adventure {
     Room room8 = new Room("Wet Corridor (Room 8)");
     Room room9 = new Room("Mess Hall (Room 9)");
 
-    Room currentRoom = room1;
+
 
     public void roomsInit(){
         //room1
@@ -83,9 +87,10 @@ public class Adventure {
                 the cracks. A dungeon... You rise to your feet and dust yourself off, determined to make your way
                 out of here...
                 """);
+        currentRoom = room1;
         boolean playing = true;
         while (playing){
-            IO.println("You are in the "+currentRoom.getName());
+            IO.println("You are in the "+ currentRoom.getName());
             if (currentRoom.isLit()){IO.println(currentRoom.getDescription());}
             else {IO.println("You strain your eyes, it's too dark to see. You need some LIGHT");}
 
@@ -101,6 +106,7 @@ public class Adventure {
                     case "EAST" -> roomMovedTo = currentRoom.getEast();
                     case "SOUTH" -> roomMovedTo = currentRoom.getSouth();
                     case "WEST" -> roomMovedTo = currentRoom.getWest();
+                    case "XYZZY" -> {xyzzy(); inputWasNotMove = true;}
                     case "LIGHT" -> {
                         currentRoom.setLit(true); inputWasNotMove = true;
                     }
@@ -121,5 +127,10 @@ public class Adventure {
                 else {currentRoom = roomMovedTo; playerInputIsInvalid = false;}
             }
         }
+    }
+    private void xyzzy() {
+        Room[] teleportRooms = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
+        int answer = Integer.parseInt(IO.readln("Where do you want to teleport?"));
+        currentRoom = teleportRooms[answer - 1];
     }
 }
