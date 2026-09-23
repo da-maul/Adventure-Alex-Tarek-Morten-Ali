@@ -20,8 +20,21 @@ public class Room {
     //getters
     public String getName() {return name;}
     public String getDescription() {return description;}
-    public Room getNorth() {return north;}
-    public Room getEast() {return east;}
-    public Room getSouth() {return south;}
-    public Room getWest() {return west;}
+
+    public Room getNorth() {
+        if (north != null){return north;}
+        else {return this;}
+        }
+    public Room getEast() {
+        if (east != null){return east;}
+        else {return this;}
+    }
+    public Room getSouth() {
+        if (south != null){return south;}
+        else {return this;}
+    }
+    public Room getWest() {
+        if (west != null){return west;}
+        else {return this;}
+    }
 }
