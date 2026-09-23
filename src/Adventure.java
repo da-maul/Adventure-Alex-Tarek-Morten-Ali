@@ -14,6 +14,8 @@ public class Adventure {
     Room room8 = new Room("Wet Corridor (Room 8)");
     Room room9 = new Room("Mess Hall (Room 9)");
 
+    String[] commands = {"NORTH","EAST","SOUTH","WEST","LIGHT","DARKNESS","XYZZY","EXIT"};
+
 
 
     public void roomsInit(){
@@ -97,10 +99,12 @@ public class Adventure {
 
             boolean playerInputIsInvalid = true;
             while (playerInputIsInvalid) {
-                String input = IO.readln("What do you do?").toUpperCase();
+                String input = IO.readln("What do you do?");
+                input = handleInput(input);
                 //IO.println("player's input is:"+ input); //Debug Line
                 Room roomMovedTo = currentRoom;
                 boolean inputWasNotMove = false;
+                boolean lightWasCast = false;
                 switch (input) {
                     case "NORTH" -> roomMovedTo = currentRoom.getNorth();
                     case "EAST" -> roomMovedTo = currentRoom.getEast();
@@ -108,19 +112,29 @@ public class Adventure {
                     case "WEST" -> roomMovedTo = currentRoom.getWest();
                     case "XYZZY" -> {xyzzy(); inputWasNotMove = true;}
                     case "LIGHT" -> {
-                        currentRoom.setLit(true); inputWasNotMove = true;
+                        currentRoom.setLit(true); inputWasNotMove = true; lightWasCast = true;
                     }
                     case "DARKNESS" -> {
-                        currentRoom.setLit(false); inputWasNotMove = true;
+                        currentRoom.setLit(false); inputWasNotMove = true; lightWasCast = true;
                     }
+                    case "HELP" -> {
+                        IO.print("Commands are: ");
+                        for (String command :commands){
+                            IO.print(command+", ");
+                        }
+                        IO.println();
+                        inputWasNotMove = true;
+                    }
+                    case "EXIT" -> {playing = false; return;}
                     default -> roomMovedTo = currentRoom;
                 }
-                if (inputWasNotMove){
+                if (inputWasNotMove && lightWasCast){
                     if (currentRoom.isLit()){
                         IO.println("You cast a spell of light on this room!\n");}
                     else {IO.println("You cast a spell and cloak this room in darkness...\n");}
                     break;
                 }
+                else if (inputWasNotMove) {break;}
                 else if (roomMovedTo == currentRoom) {
                     IO.println("You get confused and bump into a wall...");
                 }
@@ -132,5 +146,25 @@ public class Adventure {
         Room[] teleportRooms = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
         int answer = Integer.parseInt(IO.readln("Where do you want to teleport?"));
         currentRoom = teleportRooms[answer - 1];
+    }
+
+    private String handleInput(String input){
+        input = input.toUpperCase();
+        switch (input){
+            case "GO NORTH" -> input = "NORTH";
+            case "N" -> input = "NORTH";
+            case "GO EAST" -> input = "EAST";
+            case "E" -> input = "EAST";
+            case "GO SOUTH" -> input = "SOUTH";
+            case "S" -> input = "SOUTH";
+            case "GO WEST" -> input = "WEST";
+            case "W" -> input = "WEST";
+            case "CAST LIGHT" -> input = "LIGHT";
+            case "TURN ON LIGHT"-> input = "LIGHT";
+            case "CAST DARKNESS" -> input = "DARKNESS";
+            case "TURN OFF LIGHT" -> input = "DARKNESS";
+            default -> input = input;
+        }
+        return input;
     }
 }
