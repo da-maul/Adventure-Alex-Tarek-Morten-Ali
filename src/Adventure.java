@@ -132,8 +132,7 @@ public class Adventure {
     }
     private void xyzzy() {
         Room[] teleportRooms = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
-        IO.println("Where do you want to teleport?");
-        int answer = Integer.parseInt(IO.readln());
+        int answer = Integer.parseInt(IO.readln("Where do you want to teleport?"));
         currentRoom = teleportRooms[answer - 1];
     }
 }
