@@ -106,9 +106,7 @@ public class Adventure {
                     case "EAST" -> roomMovedTo = currentRoom.getEast();
                     case "SOUTH" -> roomMovedTo = currentRoom.getSouth();
                     case "WEST" -> roomMovedTo = currentRoom.getWest();
-                    case "XYZZY" -> {
-                        xyzzy(); inputWasNotMove = true;
-                    }
+                    case "XYZZY" -> {xyzzy(); inputWasNotMove = true;}
                     case "LIGHT" -> {
                         currentRoom.setLit(true); inputWasNotMove = true;
                     }
