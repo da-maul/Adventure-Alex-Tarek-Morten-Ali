@@ -3,7 +3,7 @@ import java.lang.reflect.Array;
 public class Adventure {
     private Room currentRoom;
 
-
+    //all rooms declared here
     Room room1 = new Room("Entryway (Room 1)");
     Room room2 = new Room("Dry Corridor (Room 2)");
     Room room3 = new Room("Warehouse (Room 3)");
@@ -14,11 +14,12 @@ public class Adventure {
     Room room8 = new Room("Wet Corridor (Room 8)");
     Room room9 = new Room("Mess Hall (Room 9)");
 
+    //displayed when someone types out the HELP command (candidate for rewrite)
     String[] commands = {"NORTH","EAST","SOUTH","WEST","LIGHT","DARKNESS","XYZZY","EXIT"};
 
-
-
     public void roomsInit(){
+        //rooms are given adjacent rooms explicitly, then light level is set (dark by default)
+        //then the description is set in a """ formatted string.
         //room1
         room1.setEast(room2); room1.setSouth(room4);
         room1.setLit(true);
@@ -80,7 +81,9 @@ public class Adventure {
     }
 
     public void userInterface(){
+        //initializes room data
         roomsInit();
+        //start message
         IO.println("""
                     
                 You awaken with a start, a bump on the back of your head, your whole body feels bruised.
@@ -90,19 +93,22 @@ public class Adventure {
                 out of here...
                 """);
         currentRoom = room1;
+        //main loop
         boolean playing = true;
         while (playing){
             IO.println("You are in the "+ currentRoom.getName());
             if (currentRoom.isLit()){IO.println(currentRoom.getDescription());}
             else {IO.println("You strain your eyes, it's too dark to see. You need some LIGHT");}
 
-
+            //input loop plays until player makes a valid move
             boolean playerInputIsInvalid = true;
             while (playerInputIsInvalid) {
                 String input = IO.readln("What do you do?");
+                //similar inputs are concatenated and made UPPERCASE in this function
                 input = handleInput(input);
-                //IO.println("player's input is:"+ input); //Debug Line
+                //roomMovedTo defaults to the current room because not all commands move the player
                 Room roomMovedTo = currentRoom;
+                //bools for post-switch-statement sorting
                 boolean inputWasNotMove = false;
                 boolean lightWasCast = false;
                 switch (input) {
@@ -112,43 +118,50 @@ public class Adventure {
                     case "WEST" -> roomMovedTo = currentRoom.getWest();
                     case "XYZZY" -> {xyzzy(); inputWasNotMove = true;}
                     case "LIGHT" -> {
-                        currentRoom.setLit(true); inputWasNotMove = true; lightWasCast = true;
-                    }
+                        currentRoom.setLit(true); inputWasNotMove = true; lightWasCast = true;}
                     case "DARKNESS" -> {
-                        currentRoom.setLit(false); inputWasNotMove = true; lightWasCast = true;
-                    }
+                        currentRoom.setLit(false); inputWasNotMove = true; lightWasCast = true;}
                     case "HELP" -> {
                         IO.print("Commands are: ");
                         for (String command :commands){
                             IO.print(command+", ");
                         }
                         IO.println();
-                        inputWasNotMove = true;
-                    }
+                        inputWasNotMove = true;}
                     case "EXIT" -> {playing = false; return;}
+                    //default basically does nothing in the case of a failed input
                     default -> roomMovedTo = currentRoom;
                 }
+                //if the player cast light or darkness
                 if (inputWasNotMove && lightWasCast){
                     if (currentRoom.isLit()){
                         IO.println("You cast a spell of light on this room!\n");}
                     else {IO.println("You cast a spell and cloak this room in darkness...\n");}
                     break;
                 }
+                //if they did not move but had a valid input
                 else if (inputWasNotMove) {break;}
+                //if they tried to move to an invalid location.
                 else if (roomMovedTo == currentRoom) {
                     IO.println("You get confused and bump into a wall...");
                 }
+                //I don't think this can ever be hit? IDK, worth keeping here.
                 else {currentRoom = roomMovedTo; playerInputIsInvalid = false;}
             }
         }
     }
     private void xyzzy() {
+        //this method needs a little work so the output is clean if the player inputs an out-of-bounds room
+        //should be made to return a boolean and then have an if/else in main switch statement to change the cleaning behavior
         Room[] teleportRooms = {room1,room2,room3,room4,room5,room6,room7,room8,room9};
         int answer = Integer.parseInt(IO.readln("Where do you want to teleport?"));
+        //hacky line to fix OOB inputs
+        if (1 > answer || 9 < answer){IO.println("There is no room by that number..."); return;}
         currentRoom = teleportRooms[answer - 1];
     }
 
     private String handleInput(String input){
+        //method boils down similar inputs, correct inputs do not need to be changed and are handled by "default"
         input = input.toUpperCase();
         switch (input){
             case "GO NORTH" -> input = "NORTH";
