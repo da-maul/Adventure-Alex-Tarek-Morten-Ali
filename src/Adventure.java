@@ -15,12 +15,14 @@ public class Adventure {
     public void roomsInit(){
         //room1
         room1.setEast(room2); room1.setSouth(room4);
+        room1.setLit(true);
         room1.setDescription("""
                 Light filters into this room from a hole in the ceiling, bathing it in a pale glow.
                 There are two doors. One is to your EAST and another is to the SOUTH
                 """);
         //room2
         room2.setWest(room1); room2.setEast(room3);
+        room2.setLit(true);
         room2.setDescription("""
                 This dismal corridor is lit by a doorway to the WEST and grows darker as it heads to the EAST.
                 """);
@@ -32,6 +34,7 @@ public class Adventure {
                 """);
         //room4
         room4.setNorth(room1); room4.setSouth(room7);
+        room4.setLit(true);
         room4.setDescription("""
                 Dimly lit and a little humid, this room is lined with racks of rusty weapons and trunks filled with ratty sets of armor.
                 There is a door to the NORTH through which light leaks, and one to the SOUTH which looks moldy and damp.
@@ -83,21 +86,36 @@ public class Adventure {
         boolean playing = true;
         while (playing){
             IO.println("You are in the "+currentRoom.getName());
-            IO.println(currentRoom.getDescription());
+            if (currentRoom.isLit()){IO.println(currentRoom.getDescription());}
+            else {IO.println("You strain your eyes, it's too dark to see. You need some LIGHT");}
+
 
             boolean playerInputIsInvalid = true;
             while (playerInputIsInvalid) {
-                String input = IO.readln("Which way do you go?").toUpperCase();
+                String input = IO.readln("What do you do?").toUpperCase();
                 //IO.println("player's input is:"+ input); //Debug Line
-                Room roomMovedTo = new Room("");
+                Room roomMovedTo = currentRoom;
+                boolean inputWasNotMove = false;
                 switch (input) {
                     case "NORTH" -> roomMovedTo = currentRoom.getNorth();
                     case "EAST" -> roomMovedTo = currentRoom.getEast();
                     case "SOUTH" -> roomMovedTo = currentRoom.getSouth();
                     case "WEST" -> roomMovedTo = currentRoom.getWest();
+                    case "LIGHT" -> {
+                        currentRoom.setLit(true); inputWasNotMove = true;
+                    }
+                    case "DARKNESS" -> {
+                        currentRoom.setLit(false); inputWasNotMove = true;
+                    }
                     default -> roomMovedTo = currentRoom;
                 }
-                if (roomMovedTo == currentRoom) {
+                if (inputWasNotMove){
+                    if (currentRoom.isLit()){
+                        IO.println("You cast a spell of light on this room!\n");}
+                    else {IO.println("You cast a spell and cloak this room in darkness...\n");}
+                    break;
+                }
+                else if (roomMovedTo == currentRoom) {
                     IO.println("You get confused and bump into a wall...");
                 }
                 else {currentRoom = roomMovedTo; playerInputIsInvalid = false;}
