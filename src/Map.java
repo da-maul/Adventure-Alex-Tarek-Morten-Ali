@@ -2,13 +2,17 @@ import java.util.ArrayList;
 
 public class Map {
 
-    ArrayList<Room> rooms = new ArrayList<Room>();
+    ArrayList<Room> rooms = new ArrayList<>();
+    Room startingRoom;
+    String mapGreeting;
 
+    //various setters required for initialization
     private void newRoom(String name){rooms.add(new Room(name));}
     private void roomAddDesc(int roomNumber,String description){rooms.get(roomNumber-1).setDescription(description);}
+
     private void roomSetDirs(int roomNumber, int northNum, int eastNum, int southNum, int westNum){
-        //sets adjacent rooms by room number, first is the room in question
-        //the following 4 are rooms by their number in NESW order, empty directions are replaced by NULL
+        //sets adjacent rooms by room number(int), first is the room whose neighbors are being set.
+        //the following 4 are rooms by their number in NESW order, empty directions are replaced by "0"
 
         //initialize working variables
         Room workingRoom = rooms.get(roomNumber-1);
@@ -26,24 +30,40 @@ public class Map {
         workingRoom.setWest(west);
     }
     public String roomDesc(int roomNumber){return rooms.get(roomNumber-1).getDescription();}
+
     //might be bad, should probably be replaced by specific methods
     public Room getRoom(int roomNumber){return rooms.get(roomNumber-1);}
+    public ArrayList<Room> getRooms(){return rooms;}
 
-    private void makeLit(int roomNumber){
+    private void lightRoom(int roomNumber){
         //lights a room, rooms are dark by default
         rooms.get(roomNumber-1).setLit(true);
     }
+    public String getGreeting(){return mapGreeting;}
 
-    public void adventureInit1(){
+    public void initMap1(){
+        mapGreeting = """
+                    
+                You awaken with a start, a bump on the back of your head, your whole body feels bruised.
+                You open your eyes and are dazzled by the sun, sitting up, you realize you're surrounded by walls
+                on all sides. You're in a damp, cool room with walls of grey cobblestone, dark moss growing in
+                the cracks. A dungeon... You rise to your feet and dust yourself off, determined to make your way
+                out of here...
+                """;
+
         newRoom("Entryway (Room 1)"); newRoom("Dry Corridor (Room 2)"); newRoom("Warehouse (Room 3)");
         newRoom("Armory (Room 4)"); newRoom("Treasury (Room 5)"); newRoom("Kitchen (Room 6)");
         newRoom("Barracks (Room 7)"); newRoom("Wet Corridor (Room 8)"); newRoom("Mess Hall (Room 9)");
+        newRoom("Secret Room (Room 10)");
         //remember that setDirs index 1 is working room, 2-5 are NESW
         //all rooms must be initialized before neighbors can be defined
         roomSetDirs(1,0,2,4,0); roomSetDirs(2,0,3,0,1); roomSetDirs(3,0,0,6,2);
         roomSetDirs(4,1,0,7,0); roomSetDirs(5,0,0,8,0); roomSetDirs(6,3,0,9,0);
         roomSetDirs(7,4,8,0,0); roomSetDirs(8,5,9,0,7); roomSetDirs(9,6,0,0,8);
-
+        roomSetDirs(10,0,0,0,0);
+        //setting light levels
+        lightRoom(1); lightRoom(2); lightRoom(4); lightRoom(10);
+        //Room descriptions
         roomAddDesc(1, """
                 Light filters into this room from a hole in the ceiling, bathing it in a pale glow.
                 There are two doors. One is to your EAST and another is to the SOUTH
@@ -81,8 +101,12 @@ public class Map {
                 An overturned pitcher on one of the tables endlessly spews forth water, which trickles in a stream to the WEST
                 A foul odor sneaks in from the door to the NORTH, and the stream of water disappears into a corridor leading WEST.
                 """);
+        roomAddDesc(10,"""
+                You appear on a platform of stone, floating in an endless expanse of stars. You feel a bit uneasy.
+                You see ALEX, they wave to you. "Ah, I see you've found the secret room!" they say.
+                There are no doors in any direction, the only way out is the same way you came in...
+                """);
 
-
-
+        startingRoom = rooms.getFirst();
     }
 }

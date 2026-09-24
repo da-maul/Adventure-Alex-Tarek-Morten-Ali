@@ -1,72 +1,48 @@
+import java.util.ArrayList;
+
 public class Player {
     private Room currentRoom;
 
     //Set the player in the start room.
-    public void setStartingRoom(Room startingRoom) {
-        currentRoom = startingRoom;
-    }
+    public void setStartingRoom(Room startingRoom) {currentRoom = startingRoom;}
 
-    public Room getCurrentRoom() {
-        return currentRoom;
-    }
+    public Room getCurrentRoom() {return currentRoom;}
 
-    public boolean moveNorth() {
-        if (currentRoom == null) {
-            return false;
-        }
 
-        return moveTo(currentRoom.getNorth());
-    }
 
-    public boolean moveEast() {
-        if (currentRoom == null) {
-            return false;
-        }
+    public String roomName(){return currentRoom.getName();}
+    public boolean roomIsLit(){return currentRoom.isLit();}
+    public void lightRoom(){currentRoom.setLit(true);}
+    public void darkRoom(){currentRoom.setLit(false);}
+    public void describeRoom(){IO.println(currentRoom.getDescription());}
 
-        return moveTo(currentRoom.getEast());
-    }
+    //directional movement, formatted to match my deranged way of factoring code (Alex).
+    public boolean moveNorth() {if (currentRoom == null) {return false;} return moveTo(currentRoom.getNorth());}
+    public boolean moveEast() {if (currentRoom == null) {IO.println("False");return false;} return moveTo(currentRoom.getEast());}
+    public boolean moveSouth() {if (currentRoom == null) {return false;} return moveTo(currentRoom.getSouth());}
+    public boolean moveWest() {if (currentRoom == null) {return false;} return moveTo(currentRoom.getWest());}
+    //Isn't it nice and pretty how they're all on one line each? ^
 
-    public boolean moveSouth() {
-        if (currentRoom == null) {
-            return false;
-        }
-
-        return moveTo(currentRoom.getSouth());
-    }
-
-    public boolean moveWest() {
-        if (currentRoom == null) {
-            return false;
-        }
-
-        return moveTo(currentRoom.getWest());
-    }
-
-    // Moving the player.
+    // base method for moving the player (directional or teleportation)
     private boolean moveTo(Room nextRoom) {
         if (nextRoom == null || nextRoom == currentRoom) {
-            return false;
-        }
-
+            return false;}
         currentRoom = nextRoom;
         return true;
     }
 
-    // The order of the rooms in the array determines their numbers.
-    public boolean xyzzy(int roomNumber, Room[] rooms) {
-        if (rooms == null ||
-                roomNumber < 1 ||
-                roomNumber > rooms.length) {
-            return false;
-        }
-
-        Room destination = rooms[roomNumber - 1];
-
-        if (destination == null) {
-            return false;
-        }
-
-        currentRoom = destination;
-        return true;
+    // Player version of Xyzzy spell, takes in an arraylist of the rooms in the Map.
+    // Would technically be easier to put in the consoleUI, but I don't want the teachers to explode seeing
+    // movement-related code OUTSIDE of the Player Class
+    public boolean xyzzyP(ArrayList<Room> rooms){
+        int roomNumber = Integer.parseInt(IO.readln("Where do you want to teleport?"));
+        //verifying that the room in question is actually in the array
+        if (rooms == null || roomNumber < 1 || roomNumber > rooms.size())
+        {return false;}
+        Room destination = rooms.get(roomNumber-1);
+        //This line is probably not needed but I'm keeping it in for good measure
+        if (destination == null) {return false;}
+        //initializing the move
+        moveTo(destination); return true;
     }
 }
