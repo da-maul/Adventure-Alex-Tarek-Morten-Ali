@@ -1,5 +1,5 @@
 public class Room {
-    private String name;
+    private final String name;
     private String description;
     private Room north;
     private Room east;
