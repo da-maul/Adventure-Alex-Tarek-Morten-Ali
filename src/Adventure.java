@@ -165,8 +165,8 @@ public class Adventure {
             case "GO EAST", "E" -> input = "EAST";
             case "GO SOUTH", "S" -> input = "SOUTH";
             case "GO WEST", "W" -> input = "WEST";
-            case "CAST LIGHT", "TURN ON LIGHT" -> input = "LIGHT";
-            case "CAST DARKNESS", "TURN OFF LIGHT" -> input = "DARKNESS";
+            case "CAST LIGHT", "TURN ON LIGHT", "L" -> input = "LIGHT";
+            case "CAST DARKNESS", "TURN OFF LIGHT", "D" -> input = "DARKNESS";
             default -> {return input;}
         }
         return input;
