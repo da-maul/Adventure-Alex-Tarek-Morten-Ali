@@ -5,7 +5,7 @@ public class Room {
     private Room east;
     private Room south;
     private Room west;
-    private boolean isLit = false;
+    private boolean isLit = true;
 
     //Constructor is basic because most of a room is created in the "roomsInit" method in the Adventure class
     public Room(String name){
