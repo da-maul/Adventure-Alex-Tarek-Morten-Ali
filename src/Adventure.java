@@ -94,8 +94,7 @@ public class Adventure {
                 """);
         currentRoom = room1;
         //main loop
-        boolean playing = true;
-        while (playing){
+        while (true){
             IO.println("You are in the "+ currentRoom.getName());
             if (currentRoom.isLit()){IO.println(currentRoom.getDescription());}
             else {IO.println("You strain your eyes, it's too dark to see. You need some LIGHT");}
@@ -128,9 +127,7 @@ public class Adventure {
                         }
                         IO.println();
                         inputWasNotMove = true;}
-                    case "EXIT" -> {playing = false; return;}
-                    //default basically does nothing in the case of a failed input
-                    default -> roomMovedTo = currentRoom;
+                    case "EXIT" -> {return;}
                 }
                 //if the player cast light or darkness
                 if (inputWasNotMove && lightWasCast){
@@ -164,19 +161,13 @@ public class Adventure {
         //method boils down similar inputs, correct inputs do not need to be changed and are handled by "default"
         input = input.toUpperCase();
         switch (input){
-            case "GO NORTH" -> input = "NORTH";
-            case "N" -> input = "NORTH";
-            case "GO EAST" -> input = "EAST";
-            case "E" -> input = "EAST";
-            case "GO SOUTH" -> input = "SOUTH";
-            case "S" -> input = "SOUTH";
-            case "GO WEST" -> input = "WEST";
-            case "W" -> input = "WEST";
-            case "CAST LIGHT" -> input = "LIGHT";
-            case "TURN ON LIGHT"-> input = "LIGHT";
-            case "CAST DARKNESS" -> input = "DARKNESS";
-            case "TURN OFF LIGHT" -> input = "DARKNESS";
-            default -> input = input;
+            case "GO NORTH", "N" -> input = "NORTH";
+            case "GO EAST", "E" -> input = "EAST";
+            case "GO SOUTH", "S" -> input = "SOUTH";
+            case "GO WEST", "W" -> input = "WEST";
+            case "CAST LIGHT", "TURN ON LIGHT", "L" -> input = "LIGHT";
+            case "CAST DARKNESS", "TURN OFF LIGHT", "D" -> input = "DARKNESS";
+            default -> {return input;}
         }
         return input;
     }

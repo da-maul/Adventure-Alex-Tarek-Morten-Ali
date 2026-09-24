@@ -1,5 +1,5 @@
 public class Room {
-    private String name;
+    private final String name;
     private String description;
     private Room north;
     private Room east;
@@ -14,11 +14,16 @@ public class Room {
 
     //setters
     public void setDescription(String description) {this.description = description;}
-    public void setNorth(Room north) {this.north = north;}
-    public void setEast(Room east) {this.east = east;}
-    public void setSouth(Room south) {this.south = south;}
-    public void setWest(Room west) {this.west = west;}
-    public void setLit(boolean lit) {this.isLit = lit;}
+    public void setNorth(Room north) {
+        if(north != null){this.north = north;}}
+    public void setEast(Room east) {
+        if(east != null){this.east = east;}}
+    public void setSouth(Room south) {
+        if(south != null){this.south = south;}}
+    public void setWest(Room west) {
+        if(west != null){this.west = west;}}
+    public void setLit(boolean lit) {
+        this.isLit = lit;}
 
     //getters
     public String getName() {return name;}
