@@ -35,7 +35,8 @@ public class ConsoleUI {
                     case "LIGHT" -> castLight();
                     case "DARKNESS" -> castDark();
                     case "TAKE" -> take();
-                    case "DROP" -> {return;}
+                    case "DROP" -> drop();
+                    case "INVENTORY" -> describeInventory();
                     case "HELP" -> help();
                     case "EXIT" -> {return;}
                 }
@@ -97,6 +98,8 @@ public class ConsoleUI {
 
     private void describeRoom() {player.describeRoom();}
 
+    private void describeInventory(){player.describeInventory();}
+
     private String promptPlayer(){
         // method takes input and boils them down
         String input = IO.readln("What do you do?");
@@ -145,9 +148,17 @@ public class ConsoleUI {
 
     public void take(){
         String desiredItem = IO.readln("What do you want to take?");
-        if (player.addItem(desiredItem)){
+        if (!player.addItem(desiredItem)){
             IO.println("There's nothing like that here...");
         }
         else {IO.println("You take the "+ desiredItem);}
     }
+    public void drop(){
+        String desiredItem = IO.readln("What do you want to drop?");
+        if (!player.removeItem(desiredItem)){
+            IO.println("You don't have anything like that...");
+        }
+        else {IO.println("You drop the "+ desiredItem);}
+    }
+
 }

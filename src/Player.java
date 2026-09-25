@@ -13,6 +13,7 @@ public class Player {
     public void setStartingRoom(Room startingRoom) {currentRoom = startingRoom;}
     public void lightRoom(){currentRoom.setLit(true);}
     public void darkRoom(){currentRoom.setLit(false);}
+    //descibes the room
     public void describeRoom(){
         IO.println(currentRoom.getDescription());
         if (currentRoom.getItems().size()==0){
@@ -20,7 +21,23 @@ public class Player {
         } else if (getCurrentRoom().getItems().size() == 1) {
             IO.println("There is a "+currentRoom.getItems().get(0)+" in here...");
         }
-        else{IO.println("There are some things in here:");
+        else{
+            IO.println("There are some things in here:");
+            int index =0;
+            for (Item item : currentRoom.getItems()){
+                IO.println(item); //candidate for adding LONG NAME here
+                index++;
+            }
+        }
+    }
+    public void describeInventory(){
+        if (items.size() == 0){IO.println("You're not carrying anything!");}
+        else if (items.size() == 1) {IO.println("You've just got a "+items.getFirst());}
+        else {IO.println("You've got some stuff:");
+            int index =0;
+            for (Item item: items){
+            IO.println(item); //candidate for adding LONG NAME here
+            }
         }
     }
     //item related setters
@@ -82,6 +99,7 @@ public class Player {
             Item currentItem = items.get(index);
             String currentItemName = currentItem.getName();
             if (itemName.equals(currentItemName)){return currentItem;}
+            index++;
         }
         return null;
     }
