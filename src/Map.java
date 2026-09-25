@@ -9,6 +9,7 @@ public class Map {
     //various setters required for initialization
     private void newRoom(String name){rooms.add(new Room(name));}
     private void roomAddDesc(int roomNumber,String description){rooms.get(roomNumber-1).setDescription(description);}
+    private void roomAddItem(int roomNumber, String itemName){rooms.get(roomNumber-1).addItem(itemName);}
 
     private void roomSetDirs(int roomNumber, int northNum, int eastNum, int southNum, int westNum){
         //sets adjacent rooms by room number(int), first is the room whose neighbors are being set.
@@ -63,6 +64,8 @@ public class Map {
         roomSetDirs(10,0,0,0,0);
         //setting light levels
         lightRoom(1); lightRoom(2); lightRoom(4); lightRoom(10);
+        // setting room items
+        roomAddItem(1,"lamp");
         //Room descriptions
         roomAddDesc(1, """
                 Light filters into this room from a hole in the ceiling, bathing it in a pale glow.

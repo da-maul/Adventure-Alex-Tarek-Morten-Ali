@@ -34,6 +34,8 @@ public class ConsoleUI {
                     case "XYZZY" -> xyzzy();
                     case "LIGHT" -> castLight();
                     case "DARKNESS" -> castDark();
+                    case "TAKE" -> take();
+                    case "DROP" -> {return;}
                     case "HELP" -> help();
                     case "EXIT" -> {return;}
                 }
@@ -139,5 +141,13 @@ public class ConsoleUI {
         playerTeleported = true; tryInput = false;
         //unfortunately no other way to write this line
         return player.xyzzyP(map.getRooms());
+    }
+
+    public void take(){
+        String desiredItem = IO.readln("What do you want to take?");
+        if (player.addItem(desiredItem)){
+            IO.println("There's nothing like that here...");
+        }
+        else {IO.println("You take the "+ desiredItem);}
     }
 }
